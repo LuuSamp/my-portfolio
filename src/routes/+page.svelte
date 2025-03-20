@@ -1,3 +1,7 @@
+<svelte:head>
+  <title>Home</title>
+</svelte:head>
+
 <!-- <h1> (Heading 1) represents the main heading of a webpage or a section.-->
 <h1> LUCIANO PEREIRA SAMPAIO </h1>
 
