@@ -5,9 +5,8 @@
 	--color-accent-bg: oklch(65% 50% 0 / 20%);
 }
 
-body{
-
-	background-color: oklch(from var(--grey) 95% 5% h);
+html{
+	color-scheme: light dark;
 }
 
 .container {  background-color: var(--white);}
