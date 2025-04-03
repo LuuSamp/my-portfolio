@@ -2,6 +2,11 @@
   <title>Home</title>
 </svelte:head>
 
+<script>
+  import projects from "$lib/projects.json";
+  import Project from "$lib/Project.svelte";
+</script>
+
 <!-- <h1> (Heading 1) represents the main heading of a webpage or a section.-->
 <h1> LUCIANO PEREIRA SAMPAIO </h1>
 
@@ -17,4 +22,13 @@
 <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque felis ante, finibus eget libero et, commodo lacinia nulla. Mauris mi felis, maximus a pulvinar at, mollis ac enim. Integer accumsan leo non tristique ullamcorper. Aenean facilisis dui libero, sagittis luctus diam placerat non. Mauris libero massa, ullamcorper eget ultrices vitae, hendrerit a ipsum. Quisque mi neque, convallis condimentum sagittis nec, luctus id ligula. Aliquam tincidunt molestie odio vel venenatis. Morbi quis turpis diam. Donec non rhoncus tellus, at varius lacus. </p>
 
 <!-- <img> (Image) tag is used to display images.-->
-<img src="images/my_image.jpeg" alt="Not nice AI 'dog'" width="700" height="600">
+<img src="images/my_image.jpeg" alt="DICE!!" width="700" height="600">
+
+<h2>
+  Latest Projects
+</h2>
+<div class="projects">
+{#each projects.slice(0, 3) as p}
+  <Project data={p} hLevel="3"/>
+{/each}
+</div>
