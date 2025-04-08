@@ -5,6 +5,23 @@
 <script>
   import projects from "$lib/projects.json";
   import Project from "$lib/Project.svelte";
+  import { onMount } from "svelte";
+
+  let githubData = null;
+  let loading = true;
+  let error = null;
+
+  onMount(async () => {
+      try {
+          const response = await fetch("https://api.github.com/users/LuuSamp");
+          githubData = await response.json();
+      } catch (err) {
+          error = err;
+      }
+      loading = false;
+  });
+
+
 </script>
 
 <!-- <h1> (Heading 1) represents the main heading of a webpage or a section.-->
@@ -23,6 +40,25 @@
 
 <!-- <img> (Image) tag is used to display images.-->
 <img src="images/my_image.jpeg" alt="DICE!!" width="700" height="600">
+
+
+{#if loading}
+    <p>Loading...</p>
+{:else if error}
+    <p class="error">Something went wrong: {error.message}</p>
+{:else}
+    <section>
+        <h2>My GitHub Stats</h2>
+        <dl>
+            <dt>Followers</dt>
+            <dd>{githubData.followers}</dd>
+            <dt>Following</dt>
+            <dd>{githubData.following}</dd>
+            <dt>Public Repositories</dt>
+            <dd>{githubData.public_repos}</dd>
+        </dl>
+    </section>
+{/if}
 
 <h2>
   Latest Projects
