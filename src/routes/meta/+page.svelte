@@ -20,7 +20,7 @@
         left: margin.left
     };
     let hoveredIndex = -1;
-    $: hoveredCommit = commits[hoveredIndex] ?? hoveredCommit ?? {};
+    $: hoveredCommit = commits[hoveredIndex] ?? {};
 
     let cursor = {x: 0, y: 0};
 
