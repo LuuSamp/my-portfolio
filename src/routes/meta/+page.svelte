@@ -118,7 +118,7 @@
     $: filteredMaxDate = d3.max(filteredCommits.map(d => d.date));
     $: filteredMaxDatePlusOne = new Date(filteredMaxDate);
     $: filteredMaxDatePlusOne.setDate(filteredMaxDatePlusOne.getDate() + 1);
-x
+
     $: minDate = d3.min(commits.map(d => d.date));
     $: maxDate = d3.max(commits.map(d => d.date));
     $: maxDatePlusOne = new Date(maxDate);
