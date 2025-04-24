@@ -12,6 +12,8 @@
     let data = [];
     let commits = [];
     let clickedCommits = [];
+    let commitProgress = 100;
+
     let width = 1000, height = 600;
     let margin = {top: 10, right: 10, bottom: 30, left: 20};
     let xAxis, yAxis;
@@ -23,9 +25,13 @@
         left: margin.left
     };
     let hoveredIndex = -1;
-    $: hoveredCommit = commits[hoveredIndex] ?? {};
+
+    $: timeScale = d3.scaleTime().domain([minDate,maxDate]).range([0,100]);
+    $: commitMaxTime = timeScale.invert(commitProgress);
+
+    $: hoveredCommit = filteredCommits[hoveredIndex] ?? {};
     $: allTypes = Array.from(new Set(data.map(d => d.type)));
-    $: selectedLines = (clickedCommits.length > 0 ? clickedCommits : commits).flatMap(d => d.lines);
+    $: selectedLines = (clickedCommits.length > 0 ? clickedCommits : filteredCommits).flatMap(d => d.lines);
     $: selectedCounts = d3.rollup(
         selectedLines,
         v => v.length,
@@ -92,7 +98,7 @@
             hoveredIndex = -1
         }
         else if (evt.type === "click") {
-            let commit = commits[index]
+            let commit = filteredCommits[index]
             if (!clickedCommits.includes(commit)) {
                 // Add the commit to the clickedCommits array
                 clickedCommits = [...clickedCommits, commit];
@@ -105,14 +111,21 @@
 
     }
 
-
+    $: filteredCommits = commits.filter(d => {
+        return d.datetime <= commitMaxTime;
+    });
+    $: filteredMinDate = d3.min(filteredCommits.map(d => d.date));
+    $: filteredMaxDate = d3.max(filteredCommits.map(d => d.date));
+    $: filteredMaxDatePlusOne = new Date(filteredMaxDate);
+    $: filteredMaxDatePlusOne.setDate(filteredMaxDatePlusOne.getDate() + 1);
+x
     $: minDate = d3.min(commits.map(d => d.date));
     $: maxDate = d3.max(commits.map(d => d.date));
     $: maxDatePlusOne = new Date(maxDate);
     $: maxDatePlusOne.setDate(maxDatePlusOne.getDate() + 1);
 
     $: xScale = d3.scaleTime()
-                .domain([minDate, maxDatePlusOne])
+                .domain([filteredMinDate, filteredMaxDatePlusOne])
                 .range([0, width])
                 .nice();
 
@@ -150,9 +163,17 @@
     This page includes stats about the code of this website.
 </p> 
 
+<div class="slider-container">
+    <div class="slider">
+        <label for="slider">Show commits until:</label>
+        <input type="range" id="slider" name="slider" min=0 max=100 bind:value={commitProgress}/>
+    </div>
+    <time class="time-label">{commitMaxTime.toLocaleString()}</time>
+</div>
+
 <svg viewBox="0 0 {width} {height}">
     <g class="dots">
-        {#each commits as commit, index }
+        {#each filteredCommits as commit, index (commit.id) }
             <circle
                 class:selected={clickedCommits.includes(commit)}
                 cx={ xScale(commit.datetime) }
@@ -281,5 +302,20 @@ circle {
 .selected {
     fill: var(--color-accent);
 }
+
+.slider-container{
+	display:grid;
+}
+.slider{
+	display: flex;
+}
+#slider{
+	flex:1;
+}
+.time-label{
+	font-size: 0.75em;
+	text-align: right;
+}
+
 
 </style>
