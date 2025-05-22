@@ -1,3 +1,7 @@
+:global(body){
+	max-width: min(120ch, 80vw);
+}
+
 :root {
 	--grey: oklch(80% 3% 200);
 	--white: #ffffff;
